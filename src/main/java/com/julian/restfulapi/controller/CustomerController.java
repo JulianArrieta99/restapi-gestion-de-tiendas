@@ -1,50 +1,65 @@
 package com.julian.restfulapi.controller;
 
 import com.julian.restfulapi.entity.Customer;
-import com.julian.restfulapi.entity.Local;
+import com.julian.restfulapi.entity.dto.CustomerDTO;
+import com.julian.restfulapi.entity.mapper.CustomerMapper;
+import com.julian.restfulapi.error.dto.ResponseMessage;
 import com.julian.restfulapi.service.CustomerService;
-import com.julian.restfulapi.service.LocalService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
+@RequestMapping("/api/v1/customer")
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, MessageSource messageSource) {
         this.customerService = customerService;
-    }
-
-    @GetMapping("/findCustomerById/{id}")
-    Customer findCustomerById(@PathVariable Long id) {
-        return customerService.findCustomerById(id);
+        this.messageSource = messageSource;
     }
 
     @GetMapping("/findAllCustomers")
-    public List<Customer> findAllCustomers(){
-        return customerService.findAllCustomers();
+    public ResponseEntity<List<CustomerDTO>> findAllCustomers(){
+        List<Customer> customers = customerService.findAllCustomers();
+        List<CustomerDTO> customerDTO = CustomerMapper.INSTANCE.customersToCustomerDTOs(customers);
+        return ResponseEntity.ok(customerDTO);
+    }
+    @GetMapping("/findCustomerById/{id}")
+    public ResponseEntity<CustomerDTO> findCustomerById(@PathVariable Long id) {
+        Customer customer = customerService.findCustomerById(id);
+        CustomerDTO customerDTO = CustomerMapper.INSTANCE.customerToCustomerDTO(customer);
+        return ResponseEntity.ok(customerDTO);
     }
 
+
     @PostMapping("/saveCustomer")
-    public Customer saveCustomer( @RequestBody Customer customer){
-        return customerService.saveCustomer(customer);
+    public ResponseEntity<ResponseMessage<Customer>> saveCustomer( @RequestBody Customer customer){
+        Customer savedCustomer =  customerService.saveCustomer(customer);
+        String message = "Cliente creado correctamente";
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage(message, savedCustomer));
+
+
     }
 
     @PutMapping("/updateCustomer/{id}")
-    public Customer updateCustomer(@PathVariable Long id, @RequestBody Customer customer){
-        return customerService.updateCustomer(id,customer);
+    public ResponseEntity<ResponseMessage<Customer>> updateCustomer(@PathVariable Long id, @RequestBody Customer customer){
+        Customer updatedCustomer = customerService.updateCustomer(id,customer);
+        String message = "Cliente actualizado correctamente";
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message, updatedCustomer));
     }
 
     @DeleteMapping("/deleteCustomer/{id}")
-    public String deleteCustomer(@PathVariable Long id) {
+    public ResponseEntity<String> deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);
-        return "Successfully deleted";
+        return ResponseEntity.ok("Cliente eliminado correctamente");
     }
 
 }

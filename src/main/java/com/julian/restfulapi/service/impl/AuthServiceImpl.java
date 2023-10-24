@@ -1,4 +1,4 @@
-package com.julian.restfulapi.service;
+package com.julian.restfulapi.service.impl;
 
 import com.julian.restfulapi.controller.models.AuthRequest;
 import com.julian.restfulapi.controller.models.AuthResponse;
@@ -6,6 +6,8 @@ import com.julian.restfulapi.controller.models.RegisterRequest;
 import com.julian.restfulapi.entity.Customer;
 import com.julian.restfulapi.entity.Role;
 import com.julian.restfulapi.repository.CustomerRepository;
+import com.julian.restfulapi.service.AuthService;
+import com.julian.restfulapi.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

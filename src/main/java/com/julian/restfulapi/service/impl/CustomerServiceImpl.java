@@ -1,8 +1,9 @@
-package com.julian.restfulapi.service;
+package com.julian.restfulapi.service.impl;
 
 import com.julian.restfulapi.entity.Customer;
 import com.julian.restfulapi.entity.Local;
 import com.julian.restfulapi.repository.CustomerRepository;
+import com.julian.restfulapi.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
 
 
 @Service
-public class CustomerServiceImpl implements CustomerService{
+public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
 

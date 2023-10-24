@@ -1,9 +1,10 @@
-package com.julian.restfulapi.service;
+package com.julian.restfulapi.service.impl;
 
 import com.julian.restfulapi.entity.Local;
 import com.julian.restfulapi.error.local.LocalNotFoundException;
 import com.julian.restfulapi.error.local.LocalSaveException;
 import com.julian.restfulapi.repository.LocalRepository;
+import com.julian.restfulapi.service.LocalService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -17,7 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class LocalServiceImpl implements LocalService{
+public class LocalServiceImpl implements LocalService {
 
     private final LocalRepository localRepository;
     private final MessageSource messageSource;
