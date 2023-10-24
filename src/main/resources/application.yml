@@ -1,0 +1,66 @@
+# server:
+# port: 8085 (o el q sea)
+
+spring:
+  profiles:
+    active: dev
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    password: 1234
+    url: jdbc:postgresql://localhost:5432/restfulapi
+    username: julian
+  jpa:
+    database: POSTGRESQL
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  messages:
+    basename: errors
+  sql:
+    init:
+      platform: postgres
+---
+spring:
+  config:
+    activate:
+      on-profile: qa
+  datasource:
+    password: 1234
+    url: jdbc:postgresql://localhost:5432/restfulapi_qa
+    username: julian
+  jpa:
+    database: POSTGRESQL
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  messages:
+    basename: errors
+  sql:
+    init:
+      platform: postgres
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    password: 1234
+    url: jdbc:postgresql://localhost:5432/restfulapi_prod
+    username: julian
+  jpa:
+    database: POSTGRESQL
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  messages:
+    basename: errors
+  sql:
+    init:
+      platform: postgres
