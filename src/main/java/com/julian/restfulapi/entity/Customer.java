@@ -47,9 +47,6 @@ public class Customer implements UserDetails {
     private String password;
 
 
-    @Embedded
-    private Address address;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 //////////////////////////////////

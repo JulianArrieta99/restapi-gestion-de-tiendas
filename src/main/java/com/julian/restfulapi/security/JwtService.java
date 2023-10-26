@@ -1,4 +1,4 @@
-package com.julian.restfulapi.service;
+package com.julian.restfulapi.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

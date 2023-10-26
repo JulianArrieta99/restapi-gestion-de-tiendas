@@ -1,4 +1,4 @@
-package com.julian.restfulapi.error.dto;
+package com.julian.restfulapi.controller.dto;
 
 import lombok.*;
 

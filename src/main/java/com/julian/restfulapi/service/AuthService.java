@@ -6,7 +6,7 @@ import com.julian.restfulapi.controller.models.RegisterRequest;
 
 public interface AuthService {
    AuthResponse register(RegisterRequest request);
-   AuthResponse authenticate(AuthRequest request);
+   AuthResponse login(AuthRequest request);
 
 
 }

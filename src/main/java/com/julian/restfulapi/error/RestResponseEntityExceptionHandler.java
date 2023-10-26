@@ -3,7 +3,7 @@ package com.julian.restfulapi.error;
 import com.julian.restfulapi.error.dto.CustomError;
 import com.julian.restfulapi.error.dto.CustomErrorBadRequest;
 import com.julian.restfulapi.error.dto.ErrorMessage;
-import com.julian.restfulapi.error.local.LocalNotFoundException;
+import com.julian.restfulapi.error.local.StoreNotFoundException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
@@ -32,9 +32,9 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         this.messageSource = messageSource;
     }
 
-    @ExceptionHandler(LocalNotFoundException.class)
+    @ExceptionHandler(StoreNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorMessage> localNotFoundException(LocalNotFoundException exception){
+    public ResponseEntity<ErrorMessage> localNotFoundException(StoreNotFoundException exception){
         ErrorMessage message = new ErrorMessage(HttpStatus.NOT_FOUND,exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }

@@ -1,6 +1,6 @@
 package com.julian.restfulapi.controller.models;
 
-import com.julian.restfulapi.entity.Address;
+import com.julian.restfulapi.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +15,6 @@ public class RegisterRequest {
     private String lastName;
     private String email;
     private String password;
+    private Role role;
 
-    private Address address;
 }

@@ -25,8 +25,8 @@ public class Order {
 
     )
     @JoinColumn(
-            name = "local_id",
-            referencedColumnName = "localId"
+            name = "store_id",
+            referencedColumnName = "storeId"
     )
-    private Local local;
+    private Store store;
 }

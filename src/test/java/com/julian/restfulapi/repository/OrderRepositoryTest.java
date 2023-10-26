@@ -1,6 +1,6 @@
 package com.julian.restfulapi.repository;
 
-import com.julian.restfulapi.entity.Local;
+import com.julian.restfulapi.entity.Store;
 import com.julian.restfulapi.entity.Manager;
 import com.julian.restfulapi.entity.Order;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class OrderRepositoryTest {
                 .firstName("Arturo")
                 .lastName("Dorado")
                 .build();
-        Local local = Local.builder()
+        Store store = Store.builder()
                 .name("Binco")
                 .floor("Fourth floor")
                 .manager(manager)
@@ -36,7 +36,7 @@ class OrderRepositoryTest {
         Order order = Order.builder()
                 .description("Camisa de tirantes blanca")
                 .price(10.0)
-                .local(local)
+                .store(store)
                 .build();
         orderRepository.save(order);
         System.out.println("order = " + order);

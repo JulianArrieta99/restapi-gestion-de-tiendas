@@ -7,7 +7,7 @@ import com.julian.restfulapi.entity.Customer;
 import com.julian.restfulapi.entity.Role;
 import com.julian.restfulapi.repository.CustomerRepository;
 import com.julian.restfulapi.service.AuthService;
-import com.julian.restfulapi.service.JwtService;
+import com.julian.restfulapi.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(request.getRole())
                 .build();
         customerRepository.save(customer);
         String jwtToken = jwtService.generateToken(customer);
@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse authenticate(AuthRequest request) {
+    public AuthResponse login(AuthRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),

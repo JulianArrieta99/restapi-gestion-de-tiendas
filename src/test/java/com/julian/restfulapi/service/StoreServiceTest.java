@@ -1,7 +1,7 @@
 package com.julian.restfulapi.service;
 
-import com.julian.restfulapi.entity.Local;
-import com.julian.restfulapi.repository.LocalRepository;
+import com.julian.restfulapi.entity.Store;
+import com.julian.restfulapi.repository.StoreRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,34 +15,34 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-class LocalServiceTest {
+class StoreServiceTest {
 
-    private final LocalService localService;
+    private final StoreService storeService;
 
     @Autowired
-    LocalServiceTest(LocalService localService) {
-        this.localService = localService;
+    StoreServiceTest(StoreService storeService) {
+        this.storeService = storeService;
     }
     @MockBean
-    private LocalRepository localRepository;
+    private StoreRepository storeRepository;
 
     @BeforeEach
     void setUp() {
-        Local local = Local.builder()
+        Store store = Store.builder()
                 .name("PetShop")
                 .floor("Second Floor")
                 .build();
 
-        Mockito.when(localRepository.findByNameIgnoreCase("PetShop")).thenReturn(Optional.of(local));
+        Mockito.when(storeRepository.findByNameIgnoreCase("PetShop")).thenReturn(Optional.of(store));
     }
 
 
     @Test
-    @DisplayName("Prueba de obtencion de informacion de un local enviando un nombre válido")
+    @DisplayName("Prueba de obtencion de informacion de un store enviando un nombre válido")
     public void findByNameIgnoreCaseShouldFound(){
         String localName = "PetShop";
-        Local local = localService.findByNameIgnoreCase(localName).get();
-        assertEquals(localName, local.getName());
-        System.out.println("local = " + local);
+        Store store = storeService.findByNameIgnoreCase(localName).get();
+        assertEquals(localName, store.getName());
+        System.out.println("store = " + store);
     }
 }

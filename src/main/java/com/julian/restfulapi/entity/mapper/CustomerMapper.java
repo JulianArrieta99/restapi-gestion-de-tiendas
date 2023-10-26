@@ -3,6 +3,7 @@ package com.julian.restfulapi.entity.mapper;
 import com.julian.restfulapi.entity.Customer;
 import com.julian.restfulapi.entity.dto.CustomerDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.List;
 public interface CustomerMapper {
 
     CustomerMapper INSTANCE = Mappers.getMapper(CustomerMapper.class);
+
+    @Mapping(target = "role", source = "role")
     CustomerDTO customerToCustomerDTO(Customer customer);
 
     List<CustomerDTO> customersToCustomerDTOs(List<Customer> customers);

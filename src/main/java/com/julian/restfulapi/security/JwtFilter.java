@@ -1,6 +1,5 @@
-package com.julian.restfulapi.config;
+package com.julian.restfulapi.security;
 
-import com.julian.restfulapi.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

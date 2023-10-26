@@ -6,14 +6,14 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-    @Table(name = "tbl_locals")
+    @Table(name = "tbl_stores")
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
     @ToString(exclude = "manager")
 
-    public class Local {
+    public class Store {
         @Id
         @SequenceGenerator(
                 name = "local_sequence",
@@ -23,7 +23,7 @@ import java.util.List;
                 generator = "local_sequence",
                 strategy = GenerationType.SEQUENCE
         )
-        private Long localId;
+        private Long storeId;
         @NotBlank(message = "Name no puede estar vacio")
         private String name;
         @NotBlank(message = "Floor no puede estar vacio")
@@ -32,7 +32,7 @@ import java.util.List;
         @OneToOne(
                 cascade = CascadeType.PERSIST,
                 fetch = FetchType.EAGER,
-                optional = true  // si el manager es obligatorio a la hora de crear un local o no
+                optional = true  // si el manager es obligatorio a la hora de crear un store o no
 
         )
         @JoinColumn(name = "manager_id", referencedColumnName = "managerId")
@@ -44,10 +44,10 @@ import java.util.List;
                 fetch = FetchType.EAGER
         )
         @JoinTable(
-                name = "local_customer_map",
+                name = "store_customer_map",
                 joinColumns = @JoinColumn(
-                        name = "local_id",
-                        referencedColumnName = "localId"
+                        name = "store_id",
+                        referencedColumnName = "storeId"
                 ),
                 inverseJoinColumns = @JoinColumn(
                         name = "customer_id",

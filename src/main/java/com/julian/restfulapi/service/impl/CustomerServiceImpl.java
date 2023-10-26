@@ -1,14 +1,13 @@
 package com.julian.restfulapi.service.impl;
 
 import com.julian.restfulapi.entity.Customer;
-import com.julian.restfulapi.entity.Local;
 import com.julian.restfulapi.repository.CustomerRepository;
 import com.julian.restfulapi.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -27,6 +26,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Customer findCustomerById(Long id) {
+        return customerRepository.findById(id).get();
+    }
+
+    @Override
+    public Optional<Customer> findByEmailIgnoreCase(String name) {
+        return customerRepository.findByEmailIgnoreCase(name);
+    }
+
+    @Override
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
@@ -37,10 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.save(customerDb);
     }
 
-    @Override
-    public Customer findCustomerById(Long id) {
-        return customerRepository.findById(id).get();
-    }
+
 
     @Override
     public void deleteCustomer(Long id) {

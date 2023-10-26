@@ -32,5 +32,5 @@ public class Manager {
             mappedBy = "manager",
             fetch = FetchType.EAGER
     )
-    private Local local;
+    private Store store;
 }

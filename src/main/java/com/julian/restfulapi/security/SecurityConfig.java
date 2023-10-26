@@ -1,5 +1,6 @@
-package com.julian.restfulapi.config;
+package com.julian.restfulapi.security;
 
+import com.julian.restfulapi.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,8 +29,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers(publicEndpoints()).permitAll()
-                        .anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> auth.requestMatchers(publicEndpoints()).permitAll())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -38,9 +38,9 @@ public class SecurityConfig {
 
     private RequestMatcher publicEndpoints(){
         return new OrRequestMatcher(
-                new AntPathRequestMatcher("/api/auth/**"),
-                new AntPathRequestMatcher("/api/v1/customer/findAllCustomers"),
-                new AntPathRequestMatcher("/findCustomerById/**")
+                // authentication
+                new AntPathRequestMatcher("/api/v1/auth/**")
+
         );
     }
 }
