@@ -1,13 +1,10 @@
 package com.julian.restfulapi.repository;
 
 import com.julian.restfulapi.entity.Customer;
-import com.julian.restfulapi.entity.Role;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

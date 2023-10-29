@@ -1,19 +1,18 @@
 package com.julian.restfulapi.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter @Setter
 @Table (
         name = "tbl_customers",
         uniqueConstraints = @UniqueConstraint(
@@ -22,12 +21,13 @@ import java.util.List;
         )
 
 )
-public class Customer implements UserDetails {
+public class Customer {
 
     @Id
     @SequenceGenerator(
             name = "customer_sequence",
-            sequenceName = "customer_sequence"
+            sequenceName = "customer_sequence",
+            allocationSize = 1
     )
     @GeneratedValue(
             generator = "customer_sequence",
@@ -35,53 +35,25 @@ public class Customer implements UserDetails {
     )
     private Long customerId;
 
+    @NotNull(message = "no debe ser nulo")
+    @NotBlank(message = "no puede estar vacio")
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
+    @NotNull(message = "no debe ser nulo")
+    @NotBlank(message = "no puede estar vacio")
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @NotNull(message = "no debe ser nulo")
+    @NotBlank(message = "no puede estar vacio")
+    @Email(message = "Debe ser una dirección de correo electrónico válida")
     @Column(name = "email_address", nullable = false)
     private String email;
+
+    @NotNull(message = "no debe ser nulo")
+    @NotBlank(message = "no puede estar vacio")
     @Column(name = "password", nullable = false)
     private String password;
 
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
-//////////////////////////////////
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

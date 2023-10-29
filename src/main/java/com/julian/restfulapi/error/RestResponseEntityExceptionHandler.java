@@ -1,17 +1,19 @@
 package com.julian.restfulapi.error;
 
-import com.julian.restfulapi.error.dto.CustomError;
-import com.julian.restfulapi.error.dto.CustomErrorBadRequest;
-import com.julian.restfulapi.error.dto.ErrorMessage;
-import com.julian.restfulapi.error.local.StoreNotFoundException;
+import com.julian.restfulapi.error.dto.ApiError;
+import com.julian.restfulapi.error.local.CustomerNotFoundException;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,11 +21,12 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 
-@RestControllerAdvice
+@ControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final MessageSource messageSource;
@@ -32,37 +35,39 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         this.messageSource = messageSource;
     }
 
-    @ExceptionHandler(StoreNotFoundException.class)
+    @ExceptionHandler(CustomerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorMessage> localNotFoundException(StoreNotFoundException exception){
-        ErrorMessage message = new ErrorMessage(HttpStatus.NOT_FOUND,exception.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+    public String handleCustomerNotFoundException(CustomerNotFoundException ex) {
+        return ex.getMessage();
     }
+
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        CustomErrorBadRequest error = new CustomErrorBadRequest();
-        error.setErrorCode(400);
-        error.setErrorMessage(messageSource.getMessage("error.bad_request.message", null, LocaleContextHolder.getLocale()));
-        error.setTimestamp(LocalDateTime.now());
-        error.setTrace(ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "El cuerpo de la solicitud no se pudo leer correctamente", ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        CustomError error = new CustomError();
-        error.setErrorCode(HttpStatus.BAD_REQUEST.value());
-        error.setErrorMessage(messageSource.getMessage("error.validation.message", null, LocaleContextHolder.getLocale()));
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
 
-        // Obtén la lista de errores de validación individual
-        List<String> validationErrors = ex.getBindingResult().getFieldErrors()
-                .stream()
-                .map(fieldError -> fieldError.getDefaultMessage())
-                .collect(Collectors.toList());
+        ApiError apiError = new ApiError();
+        apiError.setStatus(HttpStatus.BAD_REQUEST);
+        apiError.setMessage("Los datos no son válidos");
+        apiError.setErrors(errors);
+        apiError.setTimestamp(LocalDateTime.now().toString());
+        apiError.setDocumentation("https://example.com/api/docs");
 
-        error.setDetails(validationErrors);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Error de integridad de datos", "Ya existe una entidad con el id especificado");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+    }
 
-    
 }

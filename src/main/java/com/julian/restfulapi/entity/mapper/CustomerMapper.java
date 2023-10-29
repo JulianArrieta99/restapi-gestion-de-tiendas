@@ -12,7 +12,6 @@ public interface CustomerMapper {
 
     CustomerMapper INSTANCE = Mappers.getMapper(CustomerMapper.class);
 
-    @Mapping(target = "role", source = "role")
     CustomerDTO customerToCustomerDTO(Customer customer);
 
     List<CustomerDTO> customersToCustomerDTOs(List<Customer> customers);

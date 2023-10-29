@@ -1,5 +1,8 @@
 package com.julian.restfulapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +19,9 @@ public class Manager {
 
     @Id
     @SequenceGenerator(
-            name = "manager_sequence"
+            name = "manager_sequence",
+            sequenceName = "manager_sequence",
+            allocationSize = 1
     )
     @GeneratedValue(generator = "manager_sequence",
     strategy = GenerationType.SEQUENCE
@@ -24,13 +29,13 @@ public class Manager {
 
     private Long managerId;
 
-    private String firstName;
+    private String managerName;
 
-    private String lastName;
+    private String managerLastName;
 
-    @OneToOne(
-            mappedBy = "manager",
-            fetch = FetchType.EAGER
+    @OneToOne
+    @JoinColumn(
+            name = "store_id", referencedColumnName = "storeId"
     )
     private Store store;
 }

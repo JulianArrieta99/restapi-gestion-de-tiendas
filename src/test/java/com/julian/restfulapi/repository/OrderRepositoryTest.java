@@ -24,8 +24,8 @@ class OrderRepositoryTest {
     @Test
     public void saveOrder(){
         Manager manager = Manager.builder()
-                .firstName("Arturo")
-                .lastName("Dorado")
+                .managerName("Arturo")
+                .managerLastName("Dorado")
                 .build();
         Store store = Store.builder()
                 .name("Binco")

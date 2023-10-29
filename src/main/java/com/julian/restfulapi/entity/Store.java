@@ -1,4 +1,6 @@
 package com.julian.restfulapi.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -11,22 +13,21 @@ import java.util.List;
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    @ToString(exclude = "manager")
+    @EqualsAndHashCode
 
     public class Store {
         @Id
         @SequenceGenerator(
-                name = "local_sequence",
-                sequenceName = "local_sequence"
+                name = "store_sequence",
+                sequenceName = "store_sequence",
+                allocationSize = 1
         )
         @GeneratedValue(
-                generator = "local_sequence",
+                generator = "store_sequence",
                 strategy = GenerationType.SEQUENCE
         )
         private Long storeId;
-        @NotBlank(message = "Name no puede estar vacio")
         private String name;
-        @NotBlank(message = "Floor no puede estar vacio")
         private String floor;
 
         @OneToOne(
@@ -57,6 +58,8 @@ import java.util.List;
         private List<Customer> customerList;
 
 
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Order> orders;
 
 
     }

@@ -2,7 +2,7 @@ package com.julian.restfulapi.service;
 
 
 import com.julian.restfulapi.entity.Customer;
-import com.julian.restfulapi.entity.Store;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
