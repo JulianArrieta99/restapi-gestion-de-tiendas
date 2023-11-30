@@ -2,7 +2,7 @@ package com.julian.restfulapi.error;
 
 import com.julian.restfulapi.error.dto.ApiError;
 import com.julian.restfulapi.error.local.CustomerNotFoundException;
-import org.springframework.context.MessageSource;
+import com.julian.restfulapi.error.local.ManagerNotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,12 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -29,10 +29,9 @@ import java.util.Map;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private final MessageSource messageSource;
 
-    public RestResponseEntityExceptionHandler(MessageSource messageSource) {
-        this.messageSource = messageSource;
+    public RestResponseEntityExceptionHandler() {
+
     }
 
     @ExceptionHandler(CustomerNotFoundException.class)
@@ -59,7 +58,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         apiError.setMessage("Los datos no son válidos");
         apiError.setErrors(errors);
         apiError.setTimestamp(LocalDateTime.now().toString());
-        apiError.setDocumentation("https://example.com/api/docs");
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
@@ -68,6 +66,17 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Error de integridad de datos", "Ya existe una entidad con el id especificado");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+    }
+
+    @ExceptionHandler(ManagerNotFoundException.class)
+    public ResponseEntity<Object> handleRuntimeException(ManagerNotFoundException ex) {
+        // Crear un objeto de respuesta personalizado
+        ApiError apiError = new ApiError();
+        apiError.setMessage("Error al procesar la solicitud");
+        apiError.setStatus(HttpStatus.NOT_FOUND);
+
+        // Devolver la respuesta personalizada y el código de estado adecuado
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
 }

@@ -22,4 +22,8 @@ class ManagerRepositoryTest {
         List<Manager> managerList = managerRepository.findAll();
         managerList.forEach(System.out::println);
     }
+    @Test
+    public void findManagerByName (){
+        managerRepository.findManagerByManagerNameIgnoreCase("carlo");
+    }
 }

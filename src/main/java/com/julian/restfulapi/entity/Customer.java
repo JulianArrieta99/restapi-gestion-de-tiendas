@@ -24,15 +24,7 @@ import lombok.*;
 public class Customer {
 
     @Id
-    @SequenceGenerator(
-            name = "customer_sequence",
-            sequenceName = "customer_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            generator = "customer_sequence",
-            strategy = GenerationType.SEQUENCE
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
 
     @NotNull(message = "no debe ser nulo")

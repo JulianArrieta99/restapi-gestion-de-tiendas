@@ -18,14 +18,7 @@ import lombok.NoArgsConstructor;
 public class Manager {
 
     @Id
-    @SequenceGenerator(
-            name = "manager_sequence",
-            sequenceName = "manager_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(generator = "manager_sequence",
-    strategy = GenerationType.SEQUENCE
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long managerId;
 
@@ -33,9 +26,4 @@ public class Manager {
 
     private String managerLastName;
 
-    @OneToOne
-    @JoinColumn(
-            name = "store_id", referencedColumnName = "storeId"
-    )
-    private Store store;
 }

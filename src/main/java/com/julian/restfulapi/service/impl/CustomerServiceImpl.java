@@ -1,13 +1,12 @@
 package com.julian.restfulapi.service.impl;
 
-import com.julian.restfulapi.controller.dto.ResponseMessage;
 import com.julian.restfulapi.entity.Customer;
 import com.julian.restfulapi.error.local.CustomerNotFoundException;
+import com.julian.restfulapi.error.local.ManagerNotFoundException;
 import com.julian.restfulapi.repository.CustomerRepository;
 import com.julian.restfulapi.service.CustomerService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer findCustomerById(Long id) {
         Optional<Customer> customerOptional = customerRepository.findById(id);
-        return customerOptional.orElseThrow(() -> new CustomerNotFoundException(id));
+        return customerOptional.orElseThrow(() -> new CustomerNotFoundException("El customer con el id proporcionado no fue encontrado"));
     }
 
     @Override
@@ -41,35 +40,31 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findByEmailIgnoreCase(name);
     }
 
+    @Transactional
     @Override
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
 
+    @Transactional
     @Override
     public Customer updateCustomer(Long id, Customer customer) {
         Optional<Customer> customerOptional = customerRepository.findById(id);
 
-        customerOptional.ifPresentOrElse(
-                existingCustomer -> {
-                    // Actualizar los campos del existingCustomer con los valores del customer recibido como parámetro
-                    existingCustomer.setFirstName(customer.getFirstName());
-                    existingCustomer.setLastName(customer.getLastName());
-                    existingCustomer.setEmail(customer.getEmail());
-                    existingCustomer.setPassword(customer.getPassword());
-                    // ... (actualiza otros campos según sea necesario)
+        if (customerOptional.isPresent()) {
+            Customer existingCustomer = customerOptional.get();
 
-                    // Guardar el existingCustomer actualizado en la base de datos
-                    customerRepository.save(existingCustomer);
-                },
-                () -> {
-                    // El Customer con el ID dado no existe en la base de datos, manejar según tus requerimientos, por ejemplo, lanzar una excepción
-                    throw new CustomerNotFoundException(id);
+            existingCustomer.setFirstName(customer.getFirstName());
+            existingCustomer.setLastName(customer.getLastName());
+            existingCustomer.setEmail(customer.getEmail());
+            existingCustomer.setPassword(customer.getPassword());
 
-                }
-        );
 
-        return customerOptional.orElse(null); // devolver el Customer actualizado
+            return customerRepository.save(existingCustomer);
+        } else {
+            throw new ManagerNotFoundException("Customer con ID " + id + " no encontrado");
+        }
+
     }
 
 

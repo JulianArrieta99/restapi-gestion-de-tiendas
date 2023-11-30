@@ -1,14 +1,12 @@
 package com.julian.restfulapi.controller;
 
 import com.julian.restfulapi.entity.Customer;
-import com.julian.restfulapi.entity.Store;
 import com.julian.restfulapi.entity.dto.CustomerDTO;
 import com.julian.restfulapi.entity.mapper.CustomerMapper;
-import com.julian.restfulapi.controller.dto.ResponseMessage;
 import com.julian.restfulapi.service.CustomerService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +20,10 @@ import java.util.Optional;
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final MessageSource messageSource;
 
     @Autowired
-    public CustomerController(CustomerService customerService, MessageSource messageSource) {
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-        this.messageSource = messageSource;
     }
 
     @GetMapping("/findAllCustomers")
@@ -48,17 +44,14 @@ public class CustomerController {
     }
 
     @PostMapping("/saveCustomer")
-    public ResponseEntity<ResponseMessage<Customer>> saveCustomer(@Valid @RequestBody Customer customer){
+    public ResponseEntity<Customer> saveCustomer(@Valid @RequestBody Customer customer){
         Customer savedCustomer =  customerService.saveCustomer(customer);
-        String message = "Cliente creado correctamente";
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage(message, savedCustomer));
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer);
     }
-
     @PutMapping("/updateCustomer/{id}")
-    public ResponseEntity<ResponseMessage<Customer>> updateCustomer(@Valid @PathVariable Long id, @RequestBody Customer customer){
+    public ResponseEntity<Customer> updateCustomer(@Valid @PathVariable Long id, @RequestBody Customer customer){
         Customer updatedCustomer = customerService.updateCustomer(id,customer);
-        String message = "Cliente actualizado correctamente";
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message, updatedCustomer));
+        return ResponseEntity.status(HttpStatus.OK).body(updatedCustomer);
     }
     @DeleteMapping("/deleteCustomer/{id}")
     public ResponseEntity<String> deleteCustomer(@PathVariable Long id) {
