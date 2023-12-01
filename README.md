@@ -2,6 +2,21 @@
 
 Este repositorio contiene una API Restful para gestionar clientes, gerentes y tiendas.
 
+## Tecnologías Utilizadas
+
+- **Spring Boot:** Framework de desarrollo de aplicaciones Java basado en Java Platform, Standard Edition (Java SE) que simplifica el desarrollo y despliegue de aplicaciones.
+
+- **Spring Data JPA:** Parte del proyecto Spring Data que facilita el acceso a datos mediante la integración con JPA.
+
+- **Hibernate:** Framework de mapeo objeto-relacional (ORM) que implementa JPA y facilita el trabajo con bases de datos relacionales en Java.
+
+- **Lombok:** Biblioteca de Java que agiliza el desarrollo eliminando la necesidad de escribir ciertos métodos estándar, como getters y setters.
+
+- **Maven:** Herramienta de gestión de proyectos y construcción de software.
+
+- **PostgreSQL:** Sistema de gestión de bases de datos relacional de código abierto y potente.
+
+
 ## Tabla de Contenidos
 
 1. [Endpoints](#endpoints)
