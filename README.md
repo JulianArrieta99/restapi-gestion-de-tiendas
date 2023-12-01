@@ -114,6 +114,13 @@ Este repositorio contiene una API Restful para gestionar clientes, gerentes y ti
 ## Instalación
 
 1. Clona el repositorio: `git clone https://github.com/JulianArrieta99/restfulapi.git`
+2. Navega al directorio del proyecto: `cd restfulapi`
+
+### Configuración y Ejecución
+
+3. Abre un terminal y ejecuta el siguiente comando para construir y ejecutar la aplicación:
+   ```bash
+   ./mvnw spring-boot:run
 
 ## Uso
 
