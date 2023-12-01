@@ -142,14 +142,4 @@ Este repositorio contiene una API Restful para gestionar clientes, gerentes y ti
 1. Configura el archivo de configuración según tus necesidades.
 3. Accede a la API desde tu navegador o herramienta de desarrollo API como PostMan
 
-# Agradecimientos
-
-Quiero compartir también los 2 canales de youtube que me ayudaron a aprender sobre spring y realizar este proyecto
-1. **Jaax**
-   - https://www.youtube.com/@jaaxteam
-   - contenido spring boot en español
-
-2. **Bouali Ali**
-   - https://www.youtube.com/@BoualiAli
-   - Espectacular contenido de spring boot en ingles
 
